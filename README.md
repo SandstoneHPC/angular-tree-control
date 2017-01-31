@@ -54,7 +54,7 @@ Add tree elements to your Angular template
    tree-model="dataForTheTree"
    options="treeOptions"
    on-selection="showSelected(node)"
-   selected-node="node1">
+   selected-nodes="[node1]">
    employee: {{node.name}} age {{node.age}}
 </treecontrol>
 <!-- as an attribute -->
@@ -62,7 +62,7 @@ Add tree elements to your Angular template
    tree-model="dataForTheTree"
    options="treeOptions"
    on-selection="showSelected(node)"
-   selected-node="node1">
+   selected-nodes="[node1]">
    employee: {{node.name}} age {{node.age}}
 </div>
 ```
@@ -108,8 +108,7 @@ Attributes of angular treecontrol
 - `treecontrol` : the treeview element.
 - element content : the template to evaluate against each node (and the parent scope of the tree) for the node label.
 - `tree-model` : [Node|Array[Node]] the tree data on the `$scope`. This can be an array of nodes or a single node.
-- `selected-node` : [Node], used when `multiSelection=false`. Binding for the selected node in the tree. Updating this value updates the selection displayed in the tree. Selecting a node in the tree will update this value.
-- `selected-nodes` : [Array[Node]], used when `multiSelection=true`. Binding for the selected nodes in the tree. Updating this value updates the selection displayed in the tree. Selecting a node in the tree will update this value.
+- `selected-nodes` : [Array[Node]], **Always used after v1.0.0**. Binding for the selected nodes in the tree. Updating this value updates the selection displayed in the tree. Selecting a node in the tree will update this value.
 - `expanded-nodes` : [Array[Node]] binding for the expanded nodes in the tree. Updating this value updates the nodes that are expanded in the tree.
 - `on-selection` : `(node, selected)` callback called whenever selecting a node in the tree. The callback expression can use the selected node (`node`) and a boolean which indicates if the node was selected or deselected (`selected`).
 - `on-node-toggle` : `(node, expanded)` callback called whenever a node expands or collapses in the tree. The callback expression can use the toggled node (`node`) and a boolean which indicates expansion or collapse (`expanded`).
