@@ -285,7 +285,7 @@ describe('treeControl', function() {
 
         it('should un-select a node after second click', function () {
             $rootScope.treedata = createSubTree(2, 2);
-            $rootScope.selectedItem = $rootScope.treedata[0];
+            $rootScope.selected = [$rootScope.treedata[0]];
             element = $compile('<treecontrol tree-model="treedata" selected-nodes="selected">{{node.label}}</treecontrol>')($rootScope);
             $rootScope.$digest();
 
