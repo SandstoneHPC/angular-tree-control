@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - "0.10"
 
+notifications:
+    slack: rmacc:XuJOFyi7wxFivfqbHS6KDMSw
+
 before_script:
   - npm install -g grunt-cli bower
   - bower install
