@@ -23,7 +23,7 @@ describe('treeControl', function() {
         beforeEach(function () {
             $rootScope.treedata = createSubTree(2, 2);
             $rootScope.treedata.push({});
-            element = $compile('<treecontrol tree-model="treedata" selected-node="selected">{{node.label}}</treecontrol>')($rootScope);
+            element = $compile('<treecontrol tree-model="treedata" selected-nodes="selected">{{node.label}}</treecontrol>')($rootScope);
             $rootScope.$digest();
         });
 
@@ -55,13 +55,13 @@ describe('treeControl', function() {
 
         it('should not have any nodes selected initially', function () {
             expect(element.find('.tree-selected').length).toBe(0);
-            expect($rootScope.selected).toBeUndefined();
+            expect($rootScope.selected.length).toBe(0);
         });
 
         it('should select node when clicked', function () {
             element.find('li:eq(0) div').click();
             expect(element.find('li:eq(0) div').hasClass('tree-selected')).toBeTruthy();
-            expect($rootScope.selected).toBeDefined();
+            expect($rootScope.selected.length).toBe(1);
         });
 
         it('should transclude tree labels', function () {
@@ -233,17 +233,17 @@ describe('treeControl', function() {
     describe('selection', function() {
         it('should publish the currently selected node on scope', function () {
             $rootScope.treedata = createSubTree(2, 2);
-            element = $compile('<treecontrol tree-model="treedata" selected-node="selectedItem">{{node.label}}</treecontrol>')($rootScope);
+            element = $compile('<treecontrol tree-model="treedata" selected-nodes="selected">{{node.label}}</treecontrol>')($rootScope);
             $rootScope.$digest();
 
             element.find('li:eq(0) div').click();
-            expect($rootScope.selectedItem.label).toBe('node 1');
+            expect($rootScope.selected[0].label).toBe('node 1');
         });
 
-        it('should update the tree selection if the external scope selected-node changes', function() {
+        it('should update the tree selection if the external scope selected-nodes changes', function() {
             $rootScope.treedata = createSubTree(2, 2);
-            element = $compile('<treecontrol tree-model="treedata" selected-node="selectedItem">{{node.label}}</treecontrol>')($rootScope);
-            $rootScope.selectedItem = $rootScope.treedata[1];
+            element = $compile('<treecontrol tree-model="treedata" selected-nodes="selected">{{node.label}}</treecontrol>')($rootScope);
+            $rootScope.selected = [$rootScope.treedata[1]];
             $rootScope.$digest();
 
             expect(element.find('li:eq(1) div.tree-selected').length).toBe(1);
@@ -286,13 +286,13 @@ describe('treeControl', function() {
         it('should un-select a node after second click', function () {
             $rootScope.treedata = createSubTree(2, 2);
             $rootScope.selectedItem = $rootScope.treedata[0];
-            element = $compile('<treecontrol tree-model="treedata" selected-node="selectedItem">{{node.label}}</treecontrol>')($rootScope);
+            element = $compile('<treecontrol tree-model="treedata" selected-nodes="selected">{{node.label}}</treecontrol>')($rootScope);
             $rootScope.$digest();
 
             element.find('li:eq(0) div').click();
-            expect($rootScope.selectedItem).toBeUndefined()
+            expect($rootScope.selected.length).toBe(0)
         });
-        
+
         it('should not un-select a node after second click when allowDeselect==false', function () {
             $rootScope.treeOptions = {allowDeselect: false};
             $rootScope.treedata = createSubTree(2, 2);
@@ -650,16 +650,16 @@ describe('treeControl', function() {
                     return node.label !== "node 1";
                 }
             };
-            element = $compile('<treecontrol tree-model="treedata" options="treeOptions" selected-node="selected">{{node.label}}</treecontrol>')($rootScope);
+            element = $compile('<treecontrol tree-model="treedata" options="treeOptions" selected-nodes="selected">{{node.label}}</treecontrol>')($rootScope);
             $rootScope.$digest();
 
-            expect($rootScope.selected).toBeUndefined('No selection initially');
+            expect($rootScope.selected.length).toBe(0);
 
             element.find('li:eq(0) div').click();
-            expect($rootScope.selected).toBeUndefined('Clicking "node 1" should NOT change selection');
+            expect($rootScope.selected.length).toBe(0);
 
             element.find('li:eq(1) div').click();
-            expect($rootScope.selected).toBeDefined('Clicking "node 2" should change selection');
+            expect($rootScope.selected.length).toBe(1);
         });
 
         it('should be able to accept alternative equality function', function () {
@@ -942,33 +942,6 @@ describe('treeControl', function() {
         it('should contain 6 labels with 2 wrapper divs: div.item-wrapper (from the custom template) and div.item-wrapper-2 (from the tree label template). ' +
            'The number 6 is because we have a tree with 2 nodes at each level with two expanded nodes - so 2 roots and 2 children of each expanded node.', function () {
           expect(element.find('li div.item-wrapper div.item-wrapper-2').length).toBe(6);
-        });
-    });
-
-    describe('selected Node null or undefined', function() {
-
-        it('should delete the selected node without breaking the $digest', function () {
-            $rootScope.treedata = createSubTree(2, 2);
-            element = $compile('<treecontrol tree-model="treedata" selected-node="selectedItem">{{node.label}}</treecontrol>')($rootScope);
-            $rootScope.$digest();
-
-            element.find('li:eq(0) div').click();
-            expect($rootScope.selectedItem.label).toBe('node 1');
-            delete $rootScope.selectedItem ;
-            $rootScope.$digest();
-
-        });
-
-        it('should change the selected node to null without breaking the $digest', function () {
-            $rootScope.treedata = createSubTree(2, 2);
-            element = $compile('<treecontrol tree-model="treedata" selected-node="selectedItem">{{node.label}}</treecontrol>')($rootScope);
-            $rootScope.$digest();
-
-            element.find('li:eq(0) div').click();
-            expect($rootScope.selectedItem.label).toBe('node 1');
-            $rootScope.selectedItem = null;
-            $rootScope.$digest();
-
         });
     });
 
